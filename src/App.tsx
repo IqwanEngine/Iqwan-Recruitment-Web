@@ -774,8 +774,6 @@ export default function App() {
               <div className="flex items-center justify-between px-2">
                 <div className="flex gap-6">
                   {" "}
-                  {/* Nisa kecilkan gap dari 8 ke 6 supaya lebih rapat */}
-                  {/* Button Attach Module - Masih kekal sebagai button untuk interaction masa depan */}
                   <button
                     type="button"
                     className="text-[9px] font-bold text-white/20 hover:text-cyber-blue transition-colors tracking-[0.25em] flex items-center gap-2 group font-orbitron"
@@ -786,7 +784,6 @@ export default function App() {
                     />{" "}
                     ATTACH_MODULE
                   </button>
-                  {/* Code Engine - Nisa dah tukar ke <a> tag dengan link GitHub awak! */}
                   <a
                     href="README.md"
                     target="_blank"

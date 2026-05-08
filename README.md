@@ -1,34 +1,62 @@
-🤖 IqwanEngine: Recruitment Terminal v7.2
-Welcome to the IqwanEngine Recruitment Terminal. This is an interactive, AI-driven portfolio system designed to streamline the talent acquisition process for Workflow Automation and AI Integration roles.
+# 🤖 IqwanEngine: AI-Powered Recruitment Terminal (V4)
 
-📊 System Architecture
-This terminal allows recruiters to engage in a real-time dialogue with the I.E ChatBot to explore professional background, technical competencies, and project documentation within a single, high-density interface.
+> **"Turning Professional Networking into an Interactive AI Experience."**
 
-Plaintext
+Welcome to the **IqwanEngine Recruitment Terminal**, a high-performance, standalone interactive portfolio designed to showcase technical capabilities through an AI-driven interface. Built for speed, security, and maximum engagement.
 
-┌────────────────┐       ┌──────────────────┐       ┌────────────────┐
-│   Recruiter    │       │   Neural Core    │       │    Outcome     │
-│   Interface    │◀────▶│   (LLM)          │◀────▶│   Data Shards  │
-└───────┬────────┘       └────────┬─────────┘       └───────┬────────┘
-        │                        │                          │
-  [ React/Vite ]        [ AI Logic Sync ]          [ Resume/GitHub ]
+---
 
+## 🚀 System Architecture
 
-⚡ Core Features
-Information-Dense UI: Optimized for 1080p displays using Fluid REM Scaling to ensure maximum visibility without excessive scrolling.
-AI-Powered Interviewing: A real-time chat interface (I.E ChatBot) capable of answering complex inquiries regarding professional history and technical skills.
-Secure Document Retrieval: A unique Slide-to-Activate mechanism for secure and interactive resume downloads.
-Ecosystem Integration: Direct links to LinkedIn, GitHub, and live portfolios to demonstrate cross-platform presence.
+The project follows a modular frontend architecture, optimized for deployment on **GitHub Pages** with zero backend dependency, ensuring lightning-fast load times.
 
-🛠️ Technical Stack
-Frontend: React.js, Tailwind CSS (v4), Framer Motion.
-Automation: Python, Google Apps Script, LLM API Integration.
-Market Focus: Specialized in Workflow Automation, Solution Architecture, and Algorithmic Trading Systems (XAUUSD Focus).
+### Visual UI Layout
+┌──────────────────────────────────────────────────────────┐
+│ [ PROFILE SIDEBAR ]       [ INTERACTIVE AI TERMINAL ]    │
+│                           │                              │
+│ 👤 Profile Video          │ > Initializing query...      │
+│ 📄 Dynamic Resume Link    │ > Analysis complete.         │
+│ 🔗 Social Integrations    │ > User: "What is his stack?" │
+│                           │ > AI: "Python, React, GAS.." │
+│ [ SLIDE TO ACTIVATE ]     │ [........................]   │
+└──────────────────────────────────────────────────────────┘
 
-👨‍💻 Developer Profile
-Hairul Iqwan
+### Interaction Workflow
+[ User Input ] ──▶ [ Security Guard ] ──▶ [ Logic Engine ] ──▶ [ Output ]
+       │                 │                      │                │
+       └─ Validates ─────┴─ Filters Sensitive ──┴─ Fetch Data ───┘
 
-Expertise: 10+ years in Customer Operations with a focus on process optimization and automation.
-Lcation: Cyberjaya, Malaysia.
+---
 
-Vision: Engineering modern, "rare," and highly efficient automation systems through advanced AI integration.
+## 🛠️ Tech Stack & Rare Features
+
+- **Engine:** React 18 + Vite (TypeScript)
+- **Styling:** Pure CSS3 (Cyberpunk/Terminal Aesthetic)
+- **Security:** Custom `guard.js` middleware for regex-based data masking.
+- **Interactions:** "Slide to Activate" resume downloader (Anti-Bot mechanism).
+- **Visualization:** Integrated `BlockchainVisualizer` for data flow aesthetics.
+
+## 🔐 Security & Data Privacy (The "Guard" System)
+IqwanEngine includes a specialized security layer that intercepts all user queries to:
+- Filter sensitive personal data (NRIC, Phone Numbers).
+- Block unauthorized access to classified system logic.
+- Redirect inquiries to professional channels (LinkedIn/Email).
+
+## ⚡ Performance Optimization
+- **Zero Library Bloat:** Minimal external dependencies for <1s load time.
+- **Media Optimization:** FFmpeg-compressed assets for mobile responsiveness.
+- **State Management:** Lightweight React Hooks for seamless chat history.
+
+---
+
+## 🏃‍♂️ Local Development
+
+```bash
+# Clone the repository
+git clone [https://github.com/IqwanEngine/Iqwan-Recruitment-Web.git](https://github.com/IqwanEngine/Iqwan-Recruitment-Web.git)
+
+# Install dependencies
+npm install
+
+# Run dev server
+npm run dev

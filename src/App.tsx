@@ -407,7 +407,7 @@ export default function App() {
             <div className="absolute -inset-1.5 bg-cyber-blue/30 rounded-full blur-2xl group-hover:bg-cyber-blue/50 transition-all duration-700 animate-pulse"></div>
             <div className="w-40 h-40 lg:w-56 lg:h-56 rounded-full border-4 border-cyber-blue p-1.5 relative z-10 overflow-hidden bg-black shadow-[0_0_30px_rgba(0,241,254,0.3)]">
               <video
-                src="/media/me.1.mp4"
+                src="./media/me.1.mp4"
                 autoPlay
                 loop
                 muted
@@ -726,6 +726,8 @@ export default function App() {
                   <Terminal size={24} />
                 </div>
                 <input
+                  id="chatInput"
+                  name="chatInput"
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
@@ -839,10 +841,14 @@ export default function App() {
                 </div>
                 <form onSubmit={handleOnboarding} className="w-full space-y-6">
                   <div className="space-y-4">
-                    <label className="text-[10px] font-orbitron text-cyber-blue tracking-[0.4em] uppercase block">
+                    <label
+                      htmlFor="companyName"
+                      className="text-[10px] font-orbitron text-cyber-blue tracking-[0.4em] uppercase block"
+                    >
                       Provide Company Identity
                     </label>
                     <input
+                      id="companyName"
                       name="companyName"
                       required
                       autoFocus

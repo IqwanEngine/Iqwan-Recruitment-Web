@@ -4,53 +4,10 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>IqwanEngine | AI Recruitment Terminal</title>
-        <link rel="stylesheet" href="./css/style.css" />
     </head>
     <body>
-        <div class="scanline"></div>
-        <main class="terminal-container">
-            <aside class="sidebar">
-                <div class="profile-frame">
-                    <video
-                        src="./media/me.1.mp4"
-                        autoplay
-                        loop
-                        muted
-                        playsinline
-                    ></video>
-                </div>
-                <nav class="links">
-                    <a href="https://github.com/IqwanEngine" target="_blank"
-                        >GITHUB</a
-                    >
-                    <a
-                        href="https://linkedin.com/in/iqwanengine-automation/"
-                        target="_blank"
-                        >LINKEDIN</a
-                    >
-                    <div id="slide-container" class="slide-to-activate">
-                        <span id="slide-text">DOWNLOAD RESUME</span>
-                        <div id="slide-handle">🚀</div>
-                    </div>
-                </nav>
-            </aside>
+        <div id="root"></div>
 
-            <section class="chat-engine">
-                <div id="chat-feed" class="chat-feed"></div>
-                <form id="chat-form" class="input-area">
-                    <input
-                        type="text"
-                        id="user-input"
-                        placeholder="Initialize query..."
-                        autocomplete="off"
-                    />
-                    <button type="submit">SEND</button>
-                </form>
-            </section>
-        </main>
-
-        <script src="./js/guard.js"></script>
-        <script src="./js/db_data.js"></script>
-        <script src="./js/main.js"></script>
+        <script type="module" src="/src/main.tsx"></script>
     </body>
 </html>

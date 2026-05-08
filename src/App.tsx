@@ -788,7 +788,7 @@ export default function App() {
                   </button>
                   {/* Code Engine - Nisa dah tukar ke <a> tag dengan link GitHub awak! */}
                   <a
-                    href="https://github.com/IqwanEngine/IqwanEngine-Recruitment-Terminal/blob/main/README.md"
+                    href="README.md"
                     target="_blank"
                     rel="noreferrer"
                     className="text-[9px] font-bold text-white/20 hover:text-cyber-blue transition-colors tracking-[0.25em] flex items-center gap-2 group font-orbitron"

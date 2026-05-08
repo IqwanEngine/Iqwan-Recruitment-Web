@@ -11,7 +11,6 @@ permissions:
 
 jobs:
   build-and-deploy:
-    # Kita tambah label 'environment' supaya GitHub benarkan deployment
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -31,9 +30,11 @@ jobs:
           npm run build
 
       - name: Upload artifact
+        # INI BAHAGIAN PENTING: Kita guna action yang betul untuk Vite
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          # Beritahu GitHub untuk ambil SEMUA isi dalam folder dist
+          path: "./dist"
 
       - name: Deploy to GitHub Pages
         id: deployment

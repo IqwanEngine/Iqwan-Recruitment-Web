@@ -1,10 +1,13 @@
-@import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* IqwanEngine */
+@import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Roboto+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;700&display=swap");
+
+/* ─────────────────────────────────────────────
+   FIX 1: Removed @tailwind base/components/utilities
+   — These are Tailwind v3 directives and conflict
+     with the Tailwind v4 @import above.
+     @import "tailwindcss" already handles everything.
+───────────────────────────────────────────── */
 
 @theme {
     --color-cyber-blue: var(--accent-color, #00f1fe);
@@ -15,20 +18,28 @@
 }
 
 @layer base {
-    /* IqwanEngine ROot */
+    /* IqwanEngine Root */
     :root {
         --accent-color: #00f1fe;
         --accent-color-dark: #006a70;
+        /* ─────────────────────────────────────────────
+           FIX 3: Added --accent-rgb for all themes.
+           Was used in body background-image but never
+           declared — caused broken glow on all themes.
+        ───────────────────────────────────────────── */
+        --accent-rgb: 0, 241, 254;
     }
 
     :root.theme-crimson {
         --accent-color: #ff003c;
         --accent-color-dark: #80001e;
+        --accent-rgb: 255, 0, 60; /* FIX 3 continued */
     }
 
     :root.theme-acid {
         --accent-color: #bfff00;
         --accent-color-dark: #5a7a00;
+        --accent-rgb: 191, 255, 0; /* FIX 3 continued */
     }
 
     /* Scaling Logic Baru (Satu tempat sahaja!) */
@@ -48,7 +59,7 @@
         background-image:
             radial-gradient(
                 circle at 50% 50%,
-                rgba(var(--accent-rgb, 0, 241, 254), 0.05) 0%,
+                rgba(var(--accent-rgb), 0.05) 0%,
                 transparent 100%
             ),
             linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
@@ -90,6 +101,11 @@
         animation: scanline 10s linear infinite;
     }
 
+    /* ─────────────────────────────────────────────
+       FIX 2: Kept only ONE @keyframes scanline here.
+       The duplicate block outside (using `bottom`)
+       was conflicting and causing a broken animation.
+    ───────────────────────────────────────────── */
     @keyframes scanline {
         0% {
             transform: translateY(-100%);
@@ -97,15 +113,6 @@
         100% {
             transform: translateY(100vh);
         }
-    }
-}
-
-@keyframes scanline {
-    0% {
-        bottom: 100%;
-    }
-    100% {
-        bottom: -100px;
     }
 }
 
@@ -171,6 +178,7 @@
 .cyber-button-glow:hover {
     box-shadow: 0 0 25px rgba(0, 241, 254, 0.5);
 }
+
 @keyframes loading-glow {
     0%,
     100% {

@@ -30,12 +30,17 @@ jobs:
           npm run build
 
       - name: Upload artifact
-        # INI BAHAGIAN PENTING: Kita guna action yang betul untuk Vite
+        # INI BAHAGIAN PENTING
         uses: actions/upload-pages-artifact@v3
         with:
-          # Beritahu GitHub untuk ambil SEMUA isi dalam folder dist
+          # IqwanEngine
           path: "./dist"
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"

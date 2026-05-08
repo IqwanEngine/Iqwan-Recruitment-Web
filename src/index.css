@@ -1,5 +1,5 @@
 @import "tailwindcss";
-/* Nisa dah gabungkan semua font di atas sekali supaya browser tak error */
+/* IqwanEngine */
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Roboto+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;700&display=swap");
 
 @theme {
@@ -11,7 +11,7 @@
 }
 
 @layer base {
-    /* Nisa dah buang :root yang berulang */
+    /* IqwanEngine ROot */
     :root {
         --accent-color: #00f1fe;
         --accent-color-dark: #006a70;

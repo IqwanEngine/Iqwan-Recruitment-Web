@@ -1,10 +1,12 @@
+// == IqwanEngine: App.tsx (Voice Engine Restored & Upgraded) ==
+
 import React, { useState, useEffect, useRef } from "react";
 import {
   motion,
   AnimatePresence,
   useMotionValue,
   useTransform,
-} from "framer-motion"; // Pastikan install framer-motion
+} from "framer-motion";
 import {
   Send,
   Terminal,
@@ -26,7 +28,7 @@ import {
   Volume2,
   VolumeX,
   RotateCcw,
-  ChevronRight, // Tambah icon ini
+  ChevronRight,
 } from "lucide-react";
 import { ParticleBackground } from "./components/ParticleBackground";
 import { BlockchainVisualizer } from "./components/BlockchainVisualizer";
@@ -37,16 +39,16 @@ type Theme = "blue" | "crimson" | "acid";
 const WEBHOOK_URL = "https://your-webhook-url.com";
 
 const RECRUITER_QUESTIONS = [
-  "What is your primary tech stack?",
-  "Tell me about IqwanEngine.",
-  "Are you open to remote work?",
-  "What is your availability to start?",
-  "Experience with AI integration?",
-  "What are your salary expectations?",
-  "Approach to team collaboration?",
-  "Most impactful achievement?",
-  "Customer Operations experience?",
-  "Problem-solving approach?",
+  "What is Iqwan's primary tech stack?",
+  "Can you tell me about the IqwanEngine project?",
+  "Is Iqwan open to remote or hybrid roles?",
+  "What is Iqwan's current availability to start?",
+  "Does he have experience with AI integration?",
+  "What are Iqwan's salary expectations?",
+  "How does Iqwan approach team collaboration?",
+  "What is Iqwan's most impactful operational achievement?",
+  "What is Iqwan's professional background?",
+  "What is Iqwan's core approach to problem-solving?",
 ];
 
 // --- SUB-COMPONENT: SLIDE TO ACTIVATE (THE POWER BUTTON) ---
@@ -54,7 +56,6 @@ const SlideToActivate = () => {
   const [isActivated, setIsActivated] = useState(false);
   const x = useMotionValue(0);
 
-  // Warna background berubah dari gelap ke biru neon bila ditarik
   const background = useTransform(
     x,
     [0, 180],
@@ -66,7 +67,6 @@ const SlideToActivate = () => {
   const handleDragEnd = () => {
     if (x.get() > 150) {
       setIsActivated(true);
-      // Link download resume
       const link = document.createElement("a");
       link.href = "./media/Muhammad_Hairul_Iqwan_Resume.pdf";
       link.download = "Iqwan_Resume.pdf";
@@ -83,13 +83,10 @@ const SlideToActivate = () => {
 
   return (
     <div className="relative mt-6 h-[48px] bg-black/50 border border-white/10 rounded-xl p-1.5 flex items-center overflow-hidden group">
-      {/* Background fill progress */}
       <motion.div
         style={{ width: x, background }}
         className="absolute left-0 top-0 bottom-0 z-0"
       />
-
-      {/* Text Hint */}
       <motion.div
         style={{ opacity }}
         className="absolute inset-0 flex items-center justify-center pointer-events-none"
@@ -98,8 +95,6 @@ const SlideToActivate = () => {
           Download Resume
         </span>
       </motion.div>
-
-      {/* Draggable Rocket Handle */}
       <motion.div
         drag="x"
         dragConstraints={{ left: 0, right: 180 }}
@@ -116,7 +111,6 @@ const SlideToActivate = () => {
           />
         )}
       </motion.div>
-
       <div className="ml-auto pr-4 pointer-events-none opacity-20">
         <ChevronRight size={18} className="animate-pulse" />
       </div>
@@ -130,10 +124,25 @@ export default function App() {
   const [isTyping, setIsTyping] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [theme, setTheme] = useState<Theme>("blue");
-  const [isMuted, setIsMuted] = useState(false);
+
+  // == IqwanEngine Voice State Management ==
+  const [isMuted, _setIsMuted] = useState(false);
+  const isMutedRef = useRef(false); // Ref untuk elak closure bug masa setTimeout
+  const voicesRef = useRef<SpeechSynthesisVoice[]>([]); // Ref untuk simpan senarai suara
+
   const [userName, setUserName] = useState<string>("");
   const [showOnboarding, setShowOnboarding] = useState<boolean>(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Fungsi khas untuk Toggle Mute dengan serta-merta
+  const toggleMute = () => {
+    const newState = !isMuted;
+    _setIsMuted(newState);
+    isMutedRef.current = newState;
+    if (newState && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel(); // Terus diam kalau ditekan mute
+    }
+  };
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("app-theme") as Theme;
@@ -142,7 +151,15 @@ export default function App() {
       applyTheme(savedTheme);
     }
 
-    // Initialize State from localStorage
+    // Load available voices asynchronously
+    const loadVoices = () => {
+      voicesRef.current = window.speechSynthesis.getVoices();
+    };
+    loadVoices();
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
     const savedName = localStorage.getItem("saved_company_name");
     const savedHistory = localStorage.getItem("saved_chat_history");
 
@@ -170,7 +187,6 @@ export default function App() {
         speak(initialMsg.content);
       }
     } else {
-      // Clean slate if no session
       setMessages([]);
     }
   }, []);
@@ -204,7 +220,6 @@ export default function App() {
     if (messages.length > 0) {
       localStorage.setItem("saved_chat_history", JSON.stringify(messages));
 
-      // Silent Background Sync
       const syncData = async () => {
         if (!WEBHOOK_URL || WEBHOOK_URL.includes("your-webhook-url")) return;
         try {
@@ -229,12 +244,29 @@ export default function App() {
     }
   }, [messages, userName]);
 
+  // == IqwanEngine: Advanced Speech Synthesis ==
   const speak = (text: string) => {
-    if ("speechSynthesis" in window && !isMuted) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
+    if ("speechSynthesis" in window && !isMutedRef.current) {
+      window.speechSynthesis.cancel(); // Reset sebelum cakap
+
+      // Bersihkan teks & potong pendek
+      const cleanText = text.replace("[RESUME_BTN]", "").trim();
+      const textToRead =
+        cleanText.length > 200 ? cleanText.slice(0, 200) + "..." : cleanText;
+
+      const utterance = new SpeechSynthesisUtterance(textToRead);
       utterance.rate = 1.0;
       utterance.pitch = 0.85;
+
+      // Pilih suara profesional
+      const preferred = voicesRef.current.find(
+        (v) =>
+          v.name.includes("Google UK English Male") ||
+          v.name.includes("Daniel") ||
+          v.name.includes("UK English"),
+      );
+      if (preferred) utterance.voice = preferred;
+
       window.speechSynthesis.speak(utterance);
     }
   };
@@ -251,17 +283,14 @@ export default function App() {
     );
   };
 
-  // 1. Logik Randomizer Baru: Kocok 10 soalan dan ambil 2 teratas
   const getDynamicSuggestions = (): string[] => {
     const shuffled = [...RECRUITER_QUESTIONS].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 2);
   };
 
-  // 2. Fungsi Utama Proses Mesej (Bersih tanpa Event)
   const handleSendMessage = (text: string) => {
     if (!text.trim() || isTyping) return;
 
-    // Clear suggestions from existing messages to keep UI clean
     setMessages((prev) =>
       prev.map((m) => ({
         ...m,
@@ -290,7 +319,7 @@ export default function App() {
         id: (Date.now() + 1).toString(),
         role: "ai",
         content: responseText,
-        suggestions: getDynamicSuggestions(), // Butang rawak di sini!
+        suggestions: getDynamicSuggestions(),
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -300,13 +329,14 @@ export default function App() {
 
       setMessages((prev) => [...prev, aiMsg]);
       setIsTyping(false);
+
+      // Panggil sistem suara automatik
       speak(responseText);
     }, 1200);
   };
 
-  // 3. Fungsi Kendali Borang (Enter Key) - Penyelamat Bug Refresh!
   const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // Halang website dari refresh
+    e.preventDefault();
     handleSendMessage(inputValue);
   };
 
@@ -333,15 +363,14 @@ export default function App() {
         status: "SYNC_READY",
       };
       setMessages([initialMsg]);
+
+      // Panggil sistem suara selepas onboarding
       speak(initialMsg.content);
     }
   };
 
   return (
     <div className="flex h-screen flex-col relative z-10 font-mono overflow-hidden">
-      <ParticleBackground />
-      <div className="scanline" />
-
       {/* Top Status Bar */}
       <div className="h-10 w-full glass-panel border-b border-white/10 flex items-center justify-between px-6 z-50">
         <div className="flex items-center gap-4">
@@ -460,12 +489,10 @@ export default function App() {
                 <span className="text-[9px] tracking-[0.3em] font-orbitron text-white/60 group-hover:text-white">
                   {link.label}
                 </span>
-                {/* Laser scan animation on hover */}
                 <div className="absolute inset-0 w-full h-[1px] bg-cyber-blue/40 -translate-y-full group-hover:animate-scan opacity-0 group-hover:opacity-100" />
               </a>
             ))}
 
-            {/* Contact Info */}
             <div className="mt-8 flex flex-col gap-4 w-full border-t border-white/10 pt-8 px-2">
               <div className="flex items-center gap-4 text-white/40 hover:text-cyber-blue transition-colors cursor-pointer group">
                 <Phone size={16} className="group-hover:animate-bounce" />
@@ -480,7 +507,6 @@ export default function App() {
                 </span>
               </div>
 
-              {/* THE MASTER BUTTON REPLACEMENT */}
               <SlideToActivate />
 
               <div className="flex justify-between items-center mt-2 px-1">
@@ -499,7 +525,6 @@ export default function App() {
 
         {/* Main Content Area (75%) */}
         <main className="flex-1 flex flex-col relative h-full overflow-hidden bg-black/40">
-          {/* Background Visualizer */}
           <div className="absolute inset-0 z-0 pointer-events-none opacity-20 flex items-center justify-center scale-150">
             <BlockchainVisualizer isActive={isTyping} />
           </div>
@@ -675,7 +700,6 @@ export default function App() {
                         </div>
                       </div>
                     </div>
-                    {/* Flow Animation Overlay */}
                     <div className="absolute inset-x-0 bottom-0 h-1 bg-white/5 overflow-hidden">
                       <motion.div
                         className="h-full bg-cyber-blue shadow-[0_0_20px_var(--accent-color)]"
@@ -688,7 +712,6 @@ export default function App() {
                         }}
                       />
                     </div>
-                    {/* Subtle particles flowing */}
                     <div className="absolute top-0 right-0 h-full w-20 overflow-hidden pointer-events-none opacity-20">
                       <motion.div
                         className="absolute top-0 right-0 w-full h-full"
@@ -731,6 +754,7 @@ export default function App() {
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
+                  autoComplete="off"
                   placeholder={
                     showOnboarding
                       ? "Just a second, getting things ready..."
@@ -753,7 +777,7 @@ export default function App() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setIsMuted(!isMuted)}
+                    onClick={toggleMute}
                     className={`p-3.5 rounded-xl transition-all duration-500 border border-white/10 hover:border-cyber-blue group ${
                       isMuted
                         ? "bg-red-500/10 text-red-400"
@@ -775,7 +799,6 @@ export default function App() {
 
               <div className="flex items-center justify-between px-2">
                 <div className="flex gap-6">
-                  {" "}
                   <button
                     type="button"
                     className="text-[9px] font-bold text-white/20 hover:text-cyber-blue transition-colors tracking-[0.25em] flex items-center gap-2 group font-orbitron"
@@ -787,7 +810,7 @@ export default function App() {
                     ATTACH_MODULE
                   </button>
                   <a
-                    href="README.md"
+                    href="Iqwan-Recruitment-Web/blob/main/README.md"
                     target="_blank"
                     rel="noreferrer"
                     className="text-[9px] font-bold text-white/20 hover:text-cyber-blue transition-colors tracking-[0.25em] flex items-center gap-2 group font-orbitron"
@@ -800,7 +823,6 @@ export default function App() {
                   </a>
                 </div>
 
-                {/* Bahagian status protocol di sebelah kanan (jika ada) */}
                 <div className="hidden sm:flex items-center gap-3">
                   <span className="text-[8px] font-bold text-white/10 tracking-[0.3em] font-orbitron">
                     PROTOCOL: IQWANENGINE_V4
@@ -813,76 +835,84 @@ export default function App() {
         </main>
       </div>
 
-      {/* Onboarding Modal */}
       <AnimatePresence>
         {showOnboarding && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-950/60 backdrop-blur-xl"
           >
             <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              className="w-full max-w-md glass-panel p-10 rounded-3xl border-2 border-cyber-blue/30 shadow-[0_0_50px_rgba(0,241,254,0.2)]"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", damping: 20, stiffness: 100 }}
+              className="w-full max-w-md bg-black/40 border border-white/10 p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden ring-1 ring-white/5"
             >
-              <div className="flex flex-col items-center text-center space-y-6">
-                <div className="w-20 h-20 rounded-2xl bg-cyber-blue/10 flex items-center justify-center border border-cyber-blue/50 animate-pulse">
-                  <Terminal size={40} className="text-cyber-blue" />
-                </div>
-                <div className="space-y-2">
-                  <h2 className="text-2xl font-orbitron font-bold text-white tracking-widest">
-                    RECRUITER_INITIALIZATION
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-cyber-blue/20 blur-[50px] rounded-full" />
+
+              <div className="flex flex-col items-center text-center space-y-8 relative z-10">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="h-[1px] w-8 bg-cyber-blue/50" />
+                    <span className="text-[10px] font-mono tracking-[0.5em] text-cyber-blue uppercase">
+                      System Access
+                    </span>
+                    <div className="h-[1px] w-8 bg-cyber-blue/50" />
+                  </div>
+
+                  <h2 className="text-3xl font-bold tracking-tight text-white font-sans">
+                    Iqwan
+                    <span className="text-cyber-blue font-mono">
+                      Engine
+                    </span>{" "}
+                    <span className="font-light opacity-50 text-2xl text-slate-300">
+                      Interview
+                    </span>
                   </h2>
-                  <p className="text-white/40 text-xs font-mono tracking-[0.2em] uppercase">
-                    Enter company name to personalize your interactive session
+                  <p className="text-slate-400 text-sm leading-relaxed max-w-[280px] mx-auto">
+                    Please identify your organization to begin the interactive
+                    session.
                   </p>
                 </div>
-                <form onSubmit={handleOnboarding} className="w-full space-y-6">
-                  <div className="space-y-4">
-                    <label
-                      htmlFor="companyName"
-                      className="text-[10px] font-orbitron text-cyber-blue tracking-[0.4em] uppercase block"
-                    >
-                      Provide Company Identity
-                    </label>
+
+                <form onSubmit={handleOnboarding} className="w-full space-y-5">
+                  <div className="relative group">
                     <input
                       id="companyName"
                       name="companyName"
                       required
                       autoFocus
-                      placeholder="ENTER_COMPANY_NAME"
-                      className="w-full bg-black/50 border border-white/10 focus:border-cyber-blue focus:ring-1 focus:ring-cyber-blue/30 rounded-xl px-6 py-4 text-white font-mono placeholder:text-white/10 outline-none transition-all"
+                      placeholder="Enter Company Name..."
+                      className="w-full bg-white/[0.03] border border-white/10 focus:border-cyber-blue/40 focus:ring-4 focus:ring-cyber-blue/5 rounded-2xl px-6 py-4 text-white text-center placeholder:text-white/20 outline-none transition-all duration-500"
                     />
                   </div>
+
                   <motion.button
                     type="submit"
-                    className="w-full bg-cyber-blue text-black font-orbitron font-black text-sm tracking-[0.3em] py-5 rounded-xl transition-all active:scale-95 flex items-center justify-center"
-                    // --- EFEK DENYUTAN NEON LAJU (ON HOVER) ---
                     whileHover={{
-                      // Keyframes untuk denyutan warna dan glow
-                      backgroundColor: [
-                        "#00f1fe", // Warna asal (cyber-blue)
-                        "#ffffff", // Denyut ke putih
-                        "#00f1fe", // Kembali ke asal
-                      ],
-                      boxShadow: [
-                        "0 0 20px rgba(0, 241, 254, 0.6)",
-                        "0 0 60px rgba(0, 241, 254, 1)", // Puncak glow tebal
-                        "0 0 20px rgba(0, 241, 254, 0.6)",
-                      ],
+                      scale: 1.02,
+                      backgroundColor: "#fff",
+                      color: "#000",
                     }}
-                    transition={{
-                      duration: 0.2, // Sangat laju (0.2 saat satu kitaran)
-                      repeat: Infinity, // Berulang selagi mouse di atas butang
-                      ease: "linear",
-                    }}
-                    // ------------------------------------------
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full border border-white/20 text-white font-bold py-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 group overflow-hidden relative"
                   >
-                    START SESSION
+                    <span className="relative z-10 tracking-widest text-xs">
+                      LAUNCH EXPERIENCE
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyber-blue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   </motion.button>
                 </form>
+
+                <div className="flex flex-col items-center gap-2 pt-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <div className="text-[9px] text-white/10 font-mono italic">
+                      Encrypted Data Stream v2.4.0
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </motion.div>

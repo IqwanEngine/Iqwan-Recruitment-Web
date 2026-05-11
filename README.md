@@ -1,59 +1,37 @@
-# 🤖 IqwanEngine: Interactive Recruitment Terminal (V4)
+# IqwanEngine | AI Recruitment Terminal 🚀
 
-> **"Bridging the gap between technical documentation and interactive storytelling."**
+An interactive, terminal-themed portfolio designed to showcase workflow automation expertise, technical architecture, and modern web development capabilities. Built specifically for technical recruiters to experience a unique, conversational resume interface.
 
-Welcome to **IqwanEngine**, a high-performance interactive portfolio designed to provide recruiters with a seamless, engaging way to explore my technical journey. This project demonstrates my focus on **user experience**, **system efficiency**, and **data security**.
+## 🛠️ The Architecture Evolution: Lessons Learned
 
----
+This project underwent a significant architectural shift. Initially conceptualized using legacy Vanilla JS, traditional HTML structuring, and standard CSS linking, the system faced scalability and deployment bottlenecks. 
 
-## 🚀 System Architecture
+The transition to a modern **React + Vite** ecosystem brought severe but valuable challenges. I documented the transition to highlight my problem-solving approach and adaptability to modern framework rules:
 
-The engine is built on a modular frontend architecture, optimized for static hosting (GitHub Pages) with zero backend dependency to ensure lightning-fast performance and accessibility.
+### 1. The Vite & Static Asset Paradigm Shift
+Moving from a legacy `public/` directory structure to Vite's module bundling required a complete mental shift. I learned how Vite handles auto-injection of compiled assets and the strict rules of relative pathing (`./`) for static media in a production build, successfully resolving `404 Not Found` deployment errors.
 
-### Visual UI Layout
-┌──────────────────────────────────────────────────────────┐
-│ [ PROFILE SIDEBAR ]       [ INTERACTIVE AI TERMINAL ]    │
-│                           │                              │
-│ 👤 Intro Video            │ > Initializing system...     │
-│ 📄 Dynamic Resume Link    │ > Analysis complete.         │
-│ 🔗 Social Connect         │ > User: "What are his skills?"│
-│                           │ > AI: "React, Python, GAS..."│
-│ [ SLIDE TO ACTIVATE ]     │ [........................]   │
-└──────────────────────────────────────────────────────────┘
+### 2. Overcoming The Tailwind CSS v4 & Vite Bottleneck
+During the build process, the application suffered from "white screen" rendering issues and pipeline failures (`Process completed with exit code 1`). The root causes and my solutions included:
+* **Version Mismatch Resolution:** Discovered a conflict where the Vite plugin was utilizing `@tailwindcss/vite` (v4), while the core system was stuck on Tailwind v3. Upgrading the entire stack to Tailwind v4 harmonized the dependencies.
+* **Vite Config Optimization:** Purged legacy experimental `optimizeDeps` entries in `vite.config.ts` that were causing configuration clashes with the new version.
+* **Strict CSS `@import` Hierarchy:** Learned the hard way about PostCSS parsing rules. Resolved a persistent build crash by strictly enforcing that `@import` statements (like Google Fonts) must sit at the absolute top of the `index.css` file, above all Tailwind directives.
 
----
+## 💻 Tech Stack
+* **Frontend Framework:** React 18 (TypeScript)
+* **Build Tool:** Vite
+* **Styling:** Tailwind CSS v4
+* **Animation:** Framer Motion (Slide-to-Activate mechanics)
+* **Deployment & CI/CD:** GitHub Actions & GitHub Pages
 
-## 🛠️ Technical Focus & Features
+## ✨ Key Features
+* **Recruiter Initialization Protocol:** A personalized onboarding sequence for visitors.
+* **Terminal Interface:** A cyberpunk/matrix-inspired UI with custom scanline animations.
+* **Interactive AI Assistant Flow:** A chat-based interface designed to answer professional inquiries and showcase portfolio details dynamically.
+* **Asset Management:** Integrated custom favicon, background looping video, and direct resume download mechanics.
 
-*   **Core Engine:** Built with **React 18 + Vite (TypeScript)** for robust type-safety and modern development standards.
-*   **Aesthetic:** **Pure CSS3** implementation of a clean, terminal-inspired interface that prioritizes readability.
-*   **Privacy-First:** Integrated a custom `guard.js` middleware that utilizes regex-based masking to protect sensitive personal identifiers.
-*   **UX Innovation:** A "Slide to Activate" resume downloader, designed as a creative anti-bot mechanism to ensure meaningful engagement.
-*   **Visualization:** Custom `BlockchainVisualizer` module to demonstrate data flow in a visually intuitive way.
+## 🚀 How to Run Locally
 
-## 🔐 Security & Data Privacy
-To maintain professional standards and data integrity, IqwanEngine includes a specialized security layer that:
-*   **Masks Sensitive Data:** Automatically filters PII (Personally Identifiable Information).
-*   **Integrity Checks:** Prevents unauthorized access to system-level logic.
-*   **Professional Redirection:** Seamlessly guides users toward official channels like LinkedIn and Email for formal inquiries.
-
-## ⚡ Performance Optimization
-*   **Zero Library Bloat:** Minimal external dependencies to achieve a sub-1s initial load time.
-*   **Media Efficiency:** All assets are compressed via FFmpeg to ensure a smooth experience on mobile and low-bandwidth connections.
-*   **State Management:** Leverages lightweight React Hooks for efficient chat history and UI state handling.
-
----
-
-## 🏃‍♂️ Local Development
-
-To explore the codebase or run the terminal locally:
-
-```bash
-# Clone the repository
-git clone [https://github.com/IqwanEngine/Iqwan-Recruitment-Web.git](https://github.com/IqwanEngine/Iqwan-Recruitment-Web.git)
-
-# Install dependencies
-npm install
-
-# Start the development server
-npm run dev
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/IqwanEngine/Iqwan-Recruitment-Web.git](https://github.com/IqwanEngine/Iqwan-Recruitment-Web.git)

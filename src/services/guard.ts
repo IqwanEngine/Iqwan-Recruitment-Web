@@ -12,7 +12,6 @@ export const SecurityGuard = {
   blockedKeywords: [
     "address",
     "house",
-    "salary",
     "phone",
     "nric",
     "ic number",

@@ -435,7 +435,7 @@ export const qaData: QAItem[] = [
   },
   {
     question: "What kind of father are you?",
-    keywords: ["father", "parenting"],
+    keywords: ["father", "parenting", "family", "married"],
     response:
       "I'm the 'Educator' father. I want Aisy and Raisya to see that with logic and hard work, they can build anything they can imagine.",
     category: "personal",

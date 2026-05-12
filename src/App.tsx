@@ -247,25 +247,35 @@ export default function App() {
   // == IqwanEngine: Advanced Speech Synthesis ==
   const speak = (text: string) => {
     if ("speechSynthesis" in window && !isMutedRef.current) {
-      window.speechSynthesis.cancel(); // Reset sebelum cakap
+      window.speechSynthesis.cancel();
 
-      // Bersihkan teks & potong pendek
       const cleanText = text.replace("[RESUME_BTN]", "").trim();
-      const textToRead =
-        cleanText.length > 200 ? cleanText.slice(0, 200) + "..." : cleanText;
+      const utterance = new SpeechSynthesisUtterance(cleanText);
 
-      const utterance = new SpeechSynthesisUtterance(textToRead);
       utterance.rate = 1.0;
       utterance.pitch = 0.85;
 
-      // Pilih suara profesional
-      const preferred = voicesRef.current.find(
-        (v) =>
-          v.name.includes("Google UK English Male") ||
-          v.name.includes("Daniel") ||
-          v.name.includes("UK English"),
-      );
-      if (preferred) utterance.voice = preferred;
+      const preferredVoices = [
+        "Google UK English Male",
+        "Google US English",
+        "Google UK English Female",
+        "Microsoft Mark",
+        "Samantha",
+        "Daniel",
+      ];
+
+      const voices = window.speechSynthesis.getVoices();
+      let selectedVoice = null;
+
+      // Loop senarai keutamaan untuk cari suara yang wujud dalam browser user
+      for (const name of preferredVoices) {
+        selectedVoice = voices.find((v) => v.name.includes(name));
+        if (selectedVoice) break; // Berhenti bila dah jumpa yang terbaik
+      }
+
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
 
       window.speechSynthesis.speak(utterance);
     }
